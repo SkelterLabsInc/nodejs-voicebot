@@ -1,0 +1,10 @@
+// This proto is based on google cloud tts proto.
+syntax = "proto3";
+
+package skelterlabs.aiq.voicebot.v1alpha1;
+
+message SynthesizeSpeechRequestConfig {}
+
+message StreamingSynthesizeSpeechResponse {
+  bytes audio_content = 1;
+}

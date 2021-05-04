@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package skelterlabs.aiq.voicebot.v1alpha1;
+
+import "speech.proto";
+import "tts.proto";
+
+message StreamingTalkRequest {
+  message StreamingTalkConfig {
+    StreamingRecognitionConfig streaming_recognition_config = 1;
+    SynthesizeSpeechRequestConfig synthesize_speech_config = 2;
+    string talk_id = 3;
+    string session_id = 5;
+    string starting_user_context_json = 4;
+  }
+
+  StreamingTalkConfig streaming_talk_config = 1;
+  bytes audio_content = 2;
+}
+
+message StreamingTalkResponse {
+  skelterlabs.aiq.voicebot.v1alpha1.StreamingSynthesizeSpeechResponse
+      streaming_synthesize_speech_response = 1;
+
+  enum TalkEvent {
+    NOTHING = 0;
+    LISTENING = 1; // Currently, not available.
+    PROCESSING_STARTED = 2;
+    SPEAKING_STARTED = 3;
+    SPEAKING_FINISHED = 4;
+  }
+
+  TalkEvent talk_event = 2;
+  string user_say = 3;
+  string agent_answer = 4;
+  string session_id = 5;
+}
+
+service Voicebot {
+  rpc StreamingTalk (stream StreamingTalkRequest)
+      returns (stream StreamingTalkResponse) {
+  }
+}
